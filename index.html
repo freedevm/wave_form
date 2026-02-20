@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curved Panel Vision</title>
+<style>
+  :root {
+    --bg: #000;
+    --panel: #c4cad4;
+    --active: #1888ff;
+    --grow-duration: 0.6s;
+    --shrink-duration: 0.3s;
+    --color-duration: 0.3s;
+    --grow-ease: cubic-bezier(.18, .64, .18, 1);
+    --shrink-ease: cubic-bezier(.22, .62, .18, 1);
+    --fallback-ease: cubic-bezier(.18, .6, .16, 1);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: var(--bg);
+    font-family: "Segoe UI", Arial, sans-serif;
+  }
+
+  .frame {
+    width: min(900px, 92vw);
+    aspect-ratio: 900 / 420;
+    --nav-right: 7.333%;
+    --nav-width: 28.444%;
+    --nav-gap: 2.667%;
+    border-radius: 40px;
+    border: 1px solid var(--panel);
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nav {
+    position: absolute;
+    top: 34px;
+    right: var(--nav-right);
+    width: var(--nav-width);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--nav-gap);
+    z-index: 2;
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .menu-toggle-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .menu-tab {
+    color: var(--panel);
+    font-weight: 400;
+    cursor: pointer;
+    user-select: none;
+    text-align: center;
+    transition: color var(--color-duration) ease;
+  }
+
+  #tab-1:checked ~ .nav label[for="tab-1"],
+  #tab-2:checked ~ .nav label[for="tab-2"] {
+    color: var(--active);
+  }
+
+  .panel-surface {
+    position: absolute;
+    inset: auto 0 -1px;
+    height: 85%;
+    z-index: 1;
+  }
+
+  .panel-surface svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .panel-surface .panel-base {
+    fill: var(--panel);
+  }
+
+  .panel-surface .bubble-shape {
+    fill: var(--panel);
+    stroke: var(--panel);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    transition: transform 0.3s var(--fallback-ease);
+    will-change: transform;
+  }
+
+  .panel-surface .bubble-shape-right {
+    transform: scale(0, 0);
+  }
+
+  #tab-1:checked ~ .panel-surface .bubble-shape-left {
+    transform: scale(1, 1);
+    animation: bubble-grow var(--grow-duration) var(--grow-ease) both;
+  }
+
+  #tab-1:checked ~ .panel-surface .bubble-shape-right {
+    transform: scale(0, 0);
+    animation: bubble-shrink var(--shrink-duration) var(--shrink-ease) both;
+  }
+
+  #tab-2:checked ~ .panel-surface .bubble-shape-left {
+    transform: scale(0, 0);
+    animation: bubble-shrink var(--shrink-duration) var(--shrink-ease) both;
+  }
+
+  #tab-2:checked ~ .panel-surface .bubble-shape-right {
+    transform: scale(1, 1);
+    animation: bubble-grow var(--grow-duration) var(--grow-ease) both;
+  }
+
+  @keyframes bubble-grow {
+    0% { transform: scale(0, 0); }
+    40% { transform: scale(1.15, 1.15); }
+    70% { transform: scale(0.9, 0.9); }
+    85% { transform: scale(1.05, 1.05); }
+    100% { transform: scale(1, 1); }
+  }
+
+  @keyframes bubble-shrink {
+    0% { transform: scale(1, 1); }
+    100% { transform: scale(0, 0); }
+  }
+
+  @media (max-width: 720px) {
+    .nav {
+      top: 18px;
+      font-size: clamp(12px, 2vw, 20px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-tab,
+    .panel-surface .bubble-shape {
+      transition: none;
+      animation: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <input class="menu-toggle-input" type="radio" name="menu" id="tab-1" checked>
+    <input class="menu-toggle-input" type="radio" name="menu" id="tab-2">
+
+    <nav class="nav" aria-label="Menu">
+      <label class="menu-tab" for="tab-1">MenuItem</label>
+      <label class="menu-tab" for="tab-2">MenuItem</label>
+    </nav>
+    <div class="panel-surface" aria-hidden="true">
+      <svg viewBox="0 0 900 320" preserveAspectRatio="none" role="presentation">
+        <path class="panel-base" d="M40 40 H860 C882 40 900 58 900 80 V320 H0 V80 C0 58 18 40 40 40 Z"/>
+        <path class="bubble-shape bubble-shape-left" d="M558 41 C578 41 593 37 607 33 C626 24 646 24 665 33 C679 37 694 41 714 41 L714 41 L558 41 Z"/>
+        <path class="bubble-shape bubble-shape-right" d="M698 41 C718 41 733 37 747 33 C766 24 786 24 805 33 C819 37 834 41 854 41 L854 41 L698 41 Z"/>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>
