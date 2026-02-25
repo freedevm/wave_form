@@ -1,5 +1,8 @@
 # `index.html` Documentation
 
+**Live demo**: [`https://freedevm.github.io/wave_form/`](https://freedevm.github.io/wave_form/)  
+**Original Figma**: [`NavWave concept`](https://www.figma.com/proto/FSSp6OdYibLAiRZnYMM7ck/NavWave?page-id=0%3A1&node-id=1-10&viewport=1007%2C540%2C0.87&t=PTw4ZQz1ERLg514i-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=1%3A10)
+
 ## Overview
 `index.html` is a standalone HTML/CSS component that renders:
 - A rounded dark frame
@@ -71,3 +74,6 @@ Quick tuning rules:
 
 ## Run
 Open `index.html` in a browser.
+
+## Live Demo
+You can view the test build here: [`https://freedevm.github.io/wave_form/`](https://freedevm.github.io/wave_form/).
